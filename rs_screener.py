@@ -10,9 +10,22 @@ startyear=2021
 startmonth=1
 startday=1
 
-start=dt.datetime(startyear,startmonth,startday)
+start = dt.datetime(startyear,startmonth,startday)
 
 now = now=dt.datetime.now()
 
-RS = stockPrice/SPYIndex
+newDf = pd.DataFrame()
 
+SPYIndex = pdr.get_data_yahoo("SPY",start,now)["Adj Close"]
+
+#Add for loop to check muptiple stocks
+
+stock=input("Enter a stock ticker symbol: ")
+
+dataFrame=pdr.get_data_yahoo(stock,start,now)
+
+dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex)*100
+
+newDf[stock] = dataFrame["RS"]
+
+print(newDf[stock])
