@@ -6,7 +6,7 @@ from pandas_datareader import data as pdr
 
 yf.pdr_override()
 
-startyear=2021
+startyear=2016
 startmonth=1
 startday=1
 
@@ -27,8 +27,15 @@ high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last
 
 #Add for loop to check muptiple stocks
 
-dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex)*100
+dataFrame["RS"] = ((dataFrame["Adj Close"]/SPYIndex)/(dataFrame["Adj Close"][-260]/SPYIndex[-260]))*100
 
 newDf[stock] = dataFrame["RS"]
 
 print(newDf[stock])
+
+currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
+
+if currentClose >= (0.8*high_of_52week): 
+    print("Near 52 Week High")
+else:
+    print("Out of Range")
