@@ -6,7 +6,7 @@ from pandas_datareader import data as pdr
 
 yf.pdr_override()
 
-startyear=2016
+startyear=2018
 startmonth=1
 startday=1
 
@@ -14,24 +14,30 @@ start = dt.datetime(startyear,startmonth,startday)
 
 now = now=dt.datetime.now()
 
-stock=input("Enter a stock ticker symbol: ")
+stocks=list(map(str,input("Enter up to five stock ticker symbols: ").split()))
 
-dataFrame=pdr.get_data_yahoo(stock,start,now)
+print(stocks) 
+
+dataFrame=pdr.get_data_yahoo(stocks,start,now)
+
+print(dataFrame)
 
 newDf = pd.DataFrame()
 
-SPYIndex = pdr.get_data_yahoo("SPY",start,now)["Adj Close"]
+SPYIndex = pdr.get_data_yahoo("SPY",start,now)
+
+print(SPYIndex)
 
 low_of_52week = min(dataFrame["Adj Close"][-260:]) #Finds minimum value of last 260 closing prices (260 trading days in 52 weeks)
 high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last 260 closing prices (260 trading days in 52 weeks)
 
 #Add for loop to check muptiple stocks
 
-dataFrame["RS"] = ((dataFrame["Adj Close"]/SPYIndex)/(dataFrame["Adj Close"][-260]/SPYIndex[-260]))*100
+dataFrame["RS"] = ((dataFrame["Adj Close"]/SPYIndex["Adj Close"])/(dataFrame["Adj Close"][-260]/SPYIndex["Adj Close"][-260]))*100
 
-newDf[stock] = dataFrame["RS"]
+newDf[stocks] = dataFrame["RS"]
 
-print(newDf[stock])
+print(newDf[stocks])
 
 currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
 
