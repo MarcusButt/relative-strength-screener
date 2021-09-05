@@ -33,6 +33,8 @@ high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last
 
 #Add for loop to check muptiple stocks
 
+#for x in stocks:
+
 dataFrame["RS"] = ((dataFrame["Adj Close"]/SPYIndex["Adj Close"])/(dataFrame["Adj Close"][-260]/SPYIndex["Adj Close"][-260]))*100
 
 newDf[stocks] = dataFrame["RS"]
