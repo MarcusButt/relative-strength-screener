@@ -24,6 +24,9 @@ SPYIndex = pdr.get_data_yahoo("SPY",start,now)
 
 print(SPYIndex)
 
+stocksInRange = []
+stocksOutOfRange = []
+
 for stock in stocks:
     dataFrame=pdr.get_data_yahoo(stock,start,now)
 
@@ -41,6 +44,12 @@ for stock in stocks:
     currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
 
     if currentClose >= (0.8*high_of_52week): 
-        print("Near 52 Week High")
+        stocksInRange.append(stock)
     else:
-        print("Out of Range")
+        stocksOutOfRange.append(stock)
+    
+print("Stocks within 20 percent of 52 week high:")
+print(stocksInRange)
+
+print("Stocks out of desired range:")
+print(stocksOutOfRange)
