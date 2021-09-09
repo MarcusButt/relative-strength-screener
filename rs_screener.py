@@ -14,6 +14,12 @@ start = dt.datetime(startyear,startmonth,startday)
 
 now = now=dt.datetime.now()
 
+def listToString(list):   
+    # initialize an empty string
+    str1 = " " 
+    # return string  
+    return (str1.join(list))
+
 stocks=list(map(str,input("Enter up to five stock ticker symbols: ").split()))
 
 print(stocks) 
@@ -48,8 +54,6 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
     
-print("Stocks within 20 percent of 52 week high:")
-print(stocksInRange)
+print("Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange))
 
-print("Stocks out of desired range:")
-print(stocksOutOfRange)
+print("Stocks out of desired range: "+ listToString(stocksOutOfRange))
