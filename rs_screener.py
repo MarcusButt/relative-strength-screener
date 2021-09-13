@@ -53,7 +53,13 @@ for stock in stocks:
         stocksInRange.append(stock)
     else:
         stocksOutOfRange.append(stock)
-    
+
+newDf['date'] = newDf.index
+print(newDf)
+
+numpyD = newDf.to_numpy() #Convert data formatting to Numpy for visualization later
+print(numpyD)
+
 print("Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange))
 
 print("Stocks out of desired range: "+ listToString(stocksOutOfRange))
