@@ -3,6 +3,7 @@ import numpy as np
 import yfinance as yf
 import datetime as dt
 from pandas_datareader import data as pdr
+import plotly as pl
 
 yf.pdr_override()
 
