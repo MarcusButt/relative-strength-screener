@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import yfinance as yf
 import datetime as dt
 from pandas_datareader import data as pdr
@@ -64,5 +63,3 @@ if not stocksOutOfRange:
     print("Stocks out of desired range: none")
 else:
     print("Stocks out of desired range: "+ listToString(stocksOutOfRange))
-
-numpyD = newDf.to_numpy() #Convert data formatting to Numpy for visualization later
