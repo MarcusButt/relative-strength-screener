@@ -2,7 +2,8 @@ import pandas as pd
 import yfinance as yf
 import datetime as dt
 from pandas_datareader import data as pdr
-import plotly as pl
+import plotly.express as px
+import plotly.graph_objects as go
 
 yf.pdr_override()
 
@@ -56,6 +57,14 @@ for stock in stocks:
 
 newDf['date'] = newDf.index
 print(newDf)
+
+fig = go.figure()
+
+for "RS_"+stock in newDF:
+    
+    fig.add_trace(go.Scatter(x="date", y="RS_"+stock, mode="lines"))
+
+fig.show()
 
 print("Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange))
 
