@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 yf.pdr_override()
 
-startyear=2018
+startyear=2019
 startmonth=1
 startday=1
 
@@ -36,6 +36,8 @@ stocksOutOfRange = []
 
 count = 0
 
+fig = go.Figure()
+
 for stock in stocks:
     
     dataFrame=pdr.get_data_yahoo(stock,start,now)
@@ -45,16 +47,16 @@ for stock in stocks:
     low_of_52week = min(dataFrame["Adj Close"][-260:]) #Finds minimum value of last 260 closing prices (260 trading days in 52 weeks)
     high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last 260 closing prices (260 trading days in 52 weeks)
 
-    dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex["Adj Close"])*100
+    dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex["Adj Close"])
 
     columnName = "RS_"+stock
 
-    newDf["RS_"+stock] = dataFrame["RS"]
+    newDf[columnName] = dataFrame["RS"]
 
     print(newDf)
 
     if count == 0:
-        newDf['date'] = newDf.index
+        newDf["date"] = newDf.index
 
     count = count + 1
 
@@ -65,9 +67,7 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatter(x="date", y=columnName, mode="lines"))
+    fig.add_trace(go.Scatter(x=newDf["date"], y=newDf[columnName], mode="lines", name=columnName))
 
 print(newDf)
 
