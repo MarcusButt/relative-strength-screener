@@ -34,7 +34,10 @@ print(SPYIndex)
 stocksInRange = []
 stocksOutOfRange = []
 
+count = 0
+
 for stock in stocks:
+    
     dataFrame=pdr.get_data_yahoo(stock,start,now)
 
     print(dataFrame)
@@ -44,9 +47,16 @@ for stock in stocks:
 
     dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex["Adj Close"])*100
 
+    columnName = "RS_"+stock
+
     newDf["RS_"+stock] = dataFrame["RS"]
 
     print(newDf)
+
+    if count == 0:
+        newDf['date'] = newDf.index
+
+    count = count + 1
 
     currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
 
@@ -55,14 +65,11 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-newDf['date'] = newDf.index
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(x="date", y=columnName, mode="lines"))
+
 print(newDf)
-
-fig = go.figure()
-
-for "RS_"+stock in newDF:
-    
-    fig.add_trace(go.Scatter(x="date", y="RS_"+stock, mode="lines"))
 
 fig.show()
 
