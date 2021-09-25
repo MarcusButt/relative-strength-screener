@@ -53,10 +53,14 @@ for stock in stocks:
 
     newDf[columnName] = dataFrame["RS"]
 
+    closingPrice = stock+"_Price"
+
+    newDf[closingPrice] = dataFrame["Adj Close"]
+
     print(newDf)
 
     if count == 0:
-        newDf["date"] = newDf.index
+        newDf["Date"] = newDf.index
 
     count = count + 1
 
@@ -67,7 +71,7 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-    fig.add_trace(go.Scatter(x=newDf["date"], y=newDf[columnName], mode="lines", name=columnName))
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName))
 
 print(newDf)
 
