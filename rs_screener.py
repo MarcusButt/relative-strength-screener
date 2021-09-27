@@ -4,10 +4,11 @@ import datetime as dt
 from pandas_datareader import data as pdr
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 yf.pdr_override()
 
-startyear=2019
+startyear=2020
 startmonth=1
 startday=1
 
@@ -71,7 +72,15 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName))
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName),secondary_y=False)
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice),secondary_y=True)
+
+    fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
+
+    fig.update_yaxes(title_text="<b>Relative Strength</b>", secondary_y=False)
+    fig.update_yaxes(title_text="<b>Stock Price</b>", secondary_y=True)
 
 print(newDf)
 
