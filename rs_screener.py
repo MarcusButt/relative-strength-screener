@@ -74,7 +74,7 @@ for stock in stocks:
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName),secondary_y=False)
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')),secondary_y=False)
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice),secondary_y=True)
 
     fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
