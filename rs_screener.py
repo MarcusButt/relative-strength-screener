@@ -38,6 +38,10 @@ stocksOutOfRange = []
 count = 0
 
 fig = go.Figure()
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
+fig.update_yaxes(title_text="<b>Relative Strength</b>", secondary_y=False)
+fig.update_yaxes(title_text="<b>Stock Price</b>", secondary_y=True)
 
 for stock in stocks:
     
@@ -72,15 +76,8 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')),secondary_y=False)
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice),secondary_y=True)
-
-    fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
-
-    fig.update_yaxes(title_text="<b>Relative Strength</b>", secondary_y=False)
-    fig.update_yaxes(title_text="<b>Stock Price</b>", secondary_y=True)
 
 print(newDf)
 
