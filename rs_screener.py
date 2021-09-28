@@ -84,7 +84,7 @@ for stock in stocks:
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=2, col=1, secondary_y=False)
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=1, col=1, secondary_y=True)
 
-fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name=closingPrice), row=1, col=1, secondary_y=True)
+fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name=SPY_Price), row=1, col=1, secondary_y=True)
 
 fig.show()
 
