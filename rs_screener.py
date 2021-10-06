@@ -39,8 +39,10 @@ count = 0
 
 fig = go.Figure()
 fig = make_subplots(rows=2, cols=1,
+                    specs=[[{"secondary_y": True}],[{}]],
                     shared_xaxes=True,
                     vertical_spacing=0.02,
+                    subplot_titles=("Relative Strength", "Stock Price"),
                     x_title="Date",
                     y_title="Price",
                     )
@@ -79,10 +81,10 @@ for stock in stocks:
     else:
         stocksOutOfRange.append(stock)
 
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1)
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
     fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
 
-fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price"), row=1, col=1)
+fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price"), row=1, col=1, secondary_y=False)
 
 fig.show()
 
