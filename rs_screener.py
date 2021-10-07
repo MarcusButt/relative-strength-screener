@@ -1,10 +1,15 @@
 import pandas as pd
 import yfinance as yf
 import datetime as dt
+from datetime import date
 from pandas_datareader import data as pdr
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import dash
+from dash.dependencies import Input, Output, State
+import dash_html_components as html
+import dash_core_components as dcc
 
 yf.pdr_override()
 
@@ -22,75 +27,101 @@ def listToString(list):
     # return string  
     return (str1.join(list))
 
-stocks=list(map(str,input("Enter up to five stock ticker symbols: ").split()))
 
-print(stocks) 
+app = dash.Dash(__name__)
 
-newDf = pd.DataFrame()
+app.layout = html.Div(children=[
+    html.H1(children='Hello Dash'),
 
-SPYIndex = pdr.get_data_yahoo("SPY",start,now)
-
-print(SPYIndex)
-
-stocksInRange = []
-stocksOutOfRange = []
-
-count = 0
-
-fig = go.Figure()
-fig = make_subplots(rows=2, cols=1,
-                    specs=[[{"secondary_y": True}],[{}]],
-                    shared_xaxes=True,
-                    vertical_spacing=0.02,
-                    subplot_titles=("Relative Strength", "Stock Price"),
-                    x_title="Date",
-                    y_title="Price",
-                    )
-fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
-
-for stock in stocks:
+    html.Div([
+        "Enter a Stock Ticker: ",
+        dcc.Input(id='my-input', value='AAPL', type='text')
+    ]),
     
-    dataFrame=pdr.get_data_yahoo(stock,start,now)
+    html.Br(),
 
-    print(dataFrame)
+    html.Button(id='submit-button', n_clicks=0, children='Submit'),
 
-    low_of_52week = min(dataFrame["Adj Close"][-260:]) #Finds minimum value of last 260 closing prices (260 trading days in 52 weeks)
-    high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last 260 closing prices (260 trading days in 52 weeks)
+    dcc.Graph(id='my-graph'),
 
-    dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex["Adj Close"])
+    html.Div(id='stocksInRange'),
 
-    columnName = "RS_"+stock
+    html.Div(id='stocksOutOfRange')
+])
 
-    newDf[columnName] = dataFrame["RS"]
+@app.callback(
+    Output('my-graph', 'figure'),
+    Output('stocksInRange', 'children'),
+    Output('stocksOutOfRange', 'children'),
+    Input('submit-button', 'n_clicks'),
+    State(component_id='my-input', component_property='value')
+)
+def update_output_div(n_clicks, input_value):
 
-    closingPrice = stock+"_Price"
+    stocks=list(map(str,input_value.split()))
 
-    newDf[closingPrice] = dataFrame["Adj Close"]
+    newDf = pd.DataFrame()
 
-    print(newDf)
+    SPYIndex = pdr.get_data_yahoo("SPY",start,now)
 
-    if count == 0:
-        newDf["Date"] = newDf.index
+    stocksInRange = []
+    stocksOutOfRange = []
 
-    count = count + 1
+    count = 0
 
-    currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
+    fig = go.Figure()
+    fig = make_subplots(rows=2, cols=1,
+                        specs=[[{"secondary_y": True}],[{}]],
+                        shared_xaxes=True,
+                        vertical_spacing=0.02,
+                        subplot_titles=("Relative Strength", "Stock Price"),
+                        x_title="Date",
+                        y_title="Price",
+                        )
+    fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
 
-    if currentClose >= (0.8*high_of_52week): 
-        stocksInRange.append(stock)
-    else:
-        stocksOutOfRange.append(stock)
+    for stock in stocks:
+        
+        dataFrame=pdr.get_data_yahoo(stock,start,now)
 
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
+        low_of_52week = min(dataFrame["Adj Close"][-260:]) #Finds minimum value of last 260 closing prices (260 trading days in 52 weeks)
+        high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last 260 closing prices (260 trading days in 52 weeks)
 
-fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price"), row=1, col=1, secondary_y=False)
+        dataFrame["RS"] = (dataFrame["Adj Close"]/SPYIndex["Adj Close"])
 
-fig.show()
+        columnName = "RS_"+stock
 
-print("Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange))
+        newDf[columnName] = dataFrame["RS"]
 
-if not stocksOutOfRange:
-    print("Stocks out of desired range: none")
-else:
-    print("Stocks out of desired range: "+ listToString(stocksOutOfRange))
+        closingPrice = stock+"_Price"
+
+        newDf[closingPrice] = dataFrame["Adj Close"]
+
+        if count == 0:
+            newDf["Date"] = newDf.index
+
+        count = count + 1
+
+        currentClose = dataFrame["Adj Close"][-1] #Access most recent close price from Yahoo finance database
+
+        if currentClose >= (0.8*high_of_52week): 
+            stocksInRange.append(stock)
+        else:
+            stocksOutOfRange.append(stock)
+
+        fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
+        fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
+
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price"), row=1, col=1, secondary_y=False)
+
+    stocksInRangeOutput = "Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange)
+
+    stocksOutOfRangeOutput = "Stocks out of desired range: none"
+
+    if stocksOutOfRange:
+        stocksOutOfRangeOutput = "Stocks out of desired range: "+ listToString(stocksOutOfRange)
+        
+    return fig, stocksInRangeOutput, stocksOutOfRangeOutput 
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
