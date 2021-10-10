@@ -73,12 +73,24 @@ def update_output_div(n_clicks, input_value):
     fig = make_subplots(rows=2, cols=1,
                         specs=[[{"secondary_y": True}],[{}]],
                         shared_xaxes=True,
-                        vertical_spacing=0.02,
+                        vertical_spacing=0.1,
                         subplot_titles=("Relative Strength", "Stock Price"),
                         x_title="Date",
                         y_title="Price",
                         )
     fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
+
+    fig.update_layout(
+    autosize=False,
+    width=1500,
+    height=500,
+    margin=dict(
+        l=100,
+        r=100,
+        b=100,
+        t=100,
+        pad=4),
+    paper_bgcolor="#b3b3b3",)
 
     for stock in stocks:
         
@@ -112,7 +124,7 @@ def update_output_div(n_clicks, input_value):
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
 
-    fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price"), row=1, col=1, secondary_y=False)
+    fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price", line_color="#e86100"), row=1, col=1, secondary_y=False)
 
     stocksInRangeOutput = "Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange)
 
