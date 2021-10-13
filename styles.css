@@ -1,8 +1,9 @@
 .header-text {
     font-size: 28px;
+    font-family: 'Lato', sans-serif;
 }
 
-.body-text {
+* {
     font-size: 16px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
 }

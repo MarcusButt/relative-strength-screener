@@ -27,8 +27,14 @@ def listToString(list):
     # return string  
     return (str1.join(list))
 
+external_stylesheets = [
+    {
+        "href": "https://fonts.googleapis.com/css2?family=Lato&display=swap",
+        "rel": "stylesheet",
+    },
+]
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
     html.H1(children='Relative Strength Screener'),
@@ -40,9 +46,9 @@ app.layout = html.Div(children=[
     
     html.Br(),
 
-    html.Div(id='stocksInRange'),
+    html.Div(id='stocksInRange', className='body-text'),
 
-    html.Div(id='stocksOutOfRange'),
+    html.Div(id='stocksOutOfRange', className='body-text'),
 
     html.Br(),
 
