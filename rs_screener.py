@@ -31,7 +31,7 @@ def listToString(list):
 app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
+    html.H1(children='Relative Strength Screener'),
 
     html.Div([
         "Enter a Stock Ticker: ",
@@ -40,13 +40,31 @@ app.layout = html.Div(children=[
     
     html.Br(),
 
+    html.Div(id='stocksInRange'),
+
+    html.Div(id='stocksOutOfRange'),
+
+    html.Br(),
+
     html.Button(id='submit-button', n_clicks=0, children='Submit'),
 
     dcc.Graph(id='my-graph'),
 
-    html.Div(id='stocksInRange'),
-
-    html.Div(id='stocksOutOfRange')
+    html.Div(
+        children=[
+            html.Div(
+                children="Date Range",
+                className="menu-title"
+                ),
+            dcc.DatePickerRange(
+                id="date-range",
+                min_date_allowed=dt.datetime(1950,1,1),
+                max_date_allowed=now,
+                start_date=start,
+                end_date=now,
+            ),
+        ]
+    ),    
 ])
 
 @app.callback(
