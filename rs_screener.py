@@ -27,17 +27,12 @@ def listToString(list):
     # return string  
     return (str1.join(list))
 
-external_stylesheets = [
-    {
-        "href": "https://fonts.googleapis.com/css2?family=Lato&display=swap",
-        "rel": "stylesheet",
-    },
-]
+external_stylesheets = ['https://fonts.googleapis.com/css2?family=Lato&display=swap']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
-    html.H1(children='Relative Strength Screener'),
+    html.H1(children='Relative Strength Screener', className="header-text"),
 
     html.Div([
         "Enter a Stock Ticker: ",
@@ -78,6 +73,8 @@ app.layout = html.Div(children=[
     Output('stocksInRange', 'children'),
     Output('stocksOutOfRange', 'children'),
     Input('submit-button', 'n_clicks'),
+    Input('date-range','start_date'),
+    Input("date-range", "end_date"),
     State(component_id='my-input', component_property='value')
 )
 def update_output_div(n_clicks, input_value):
