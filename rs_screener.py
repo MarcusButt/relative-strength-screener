@@ -47,10 +47,6 @@ app.layout = html.Div(children=[
 
     html.Br(),
 
-    html.Button(id='submit-button', n_clicks=0, children='Submit'),
-
-    dcc.Graph(id='my-graph'),
-
     html.Div(
         children=[
             html.Div(
@@ -65,19 +61,29 @@ app.layout = html.Div(children=[
                 end_date=now,
             ),
         ]
-    ),    
+    ),
+
+    html.Button(id='submit-button', n_clicks=0, children='Submit'),
+
+    html.Div(id='temporaryDate'),  
+
+    dcc.Graph(id='my-graph'),  
 ])
 
 @app.callback(
     Output('my-graph', 'figure'),
     Output('stocksInRange', 'children'),
     Output('stocksOutOfRange', 'children'),
+    Output('temporaryDate', 'children'),
     Input('submit-button', 'n_clicks'),
-    Input('date-range','start_date'),
-    Input("date-range", "end_date"),
+    State('date-range','start_date'),
+    State("date-range", "end_date"),
     State(component_id='my-input', component_property='value')
 )
-def update_output_div(n_clicks, input_value):
+def update_output_div(n_clicks, start_date, end_date, input_value):
+
+    startDateObj = dt.strptime(start_date, '%y-%m-%dT%H:%M:%S')
+    endDateObj = dt.strptime(end_date, '%y-%m-%dT%H:%M:%S')
 
     stocks=list(map(str,input_value.split()))
 
@@ -153,8 +159,21 @@ def update_output_div(n_clicks, input_value):
 
     if stocksOutOfRange:
         stocksOutOfRangeOutput = "Stocks out of desired range: "+ listToString(stocksOutOfRange)
-        
-    return fig, stocksInRangeOutput, stocksOutOfRangeOutput 
+
+    date_output = 'test'
+
+    string_prefix = 'You have selected: '
+
+    if start_date is not None:
+        string_prefix = string_prefix + 'Start Date: ' + start_date + ' | '
+    if end_date is not None:
+        string_prefix = string_prefix + 'End Date: ' + end_date
+    if len(string_prefix) == len('You have selected: '):
+        date_output = 'Select a date to see it displayed here'
+    else:
+        date_output = string_prefix
+
+    return fig, stocksInRangeOutput, stocksOutOfRangeOutput, date_output
 
 if __name__ == '__main__':
     app.run_server(debug=True)
