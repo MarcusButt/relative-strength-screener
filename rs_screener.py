@@ -36,21 +36,15 @@ app.layout = html.Div(children=[
 
     html.Div([
         "Enter a Stock Ticker: ",
-        dcc.Input(id='my-input', value='AAPL', type='text')
+        dcc.Input(id='my-input', value='AAPL', type='text', className="ticker-input")
     ]),
-    
-    html.Br(),
-
-    html.Div(id='stocksInRange', className='body-text'),
-
-    html.Div(id='stocksOutOfRange', className='body-text'),
 
     html.Br(),
 
     html.Div(
         children=[
             html.Div(
-                children="Date Range",
+                children="Select Date Range:",
                 className="menu-title"
                 ),
             dcc.DatePickerRange(
@@ -63,9 +57,17 @@ app.layout = html.Div(children=[
         ]
     ),
 
-    html.Button(id='submit-button', n_clicks=0, children='Submit'),
+    html.Button(id='submit-button', n_clicks=0, children='Submit', className='submit-button'),
 
     html.Div(id='temporaryDate'),  
+    
+    html.Br(),
+
+    html.Div(id='stocksInRange', className='body-text'),
+
+    html.Div(id='stocksOutOfRange', className='body-text'),
+
+    html.Br(),
 
     dcc.Graph(id='my-graph'),  
 ])
@@ -77,13 +79,13 @@ app.layout = html.Div(children=[
     Output('temporaryDate', 'children'),
     Input('submit-button', 'n_clicks'),
     State('date-range','start_date'),
-    State("date-range", "end_date"),
+    State('date-range', 'end_date'),
     State(component_id='my-input', component_property='value')
 )
 def update_output_div(n_clicks, start_date, end_date, input_value):
 
-    startDateObj = dt.strptime(start_date, '%y-%m-%dT%H:%M:%S')
-    endDateObj = dt.strptime(end_date, '%y-%m-%dT%H:%M:%S')
+    #startDateObj = dt.strptime(start_date, '%y-%m-%dT%H:%M:%S')
+    #endDateObj = dt.strptime(end_date, '%y-%m-%dT%H:%M:%S')
 
     stocks=list(map(str,input_value.split()))
 
