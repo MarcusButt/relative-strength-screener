@@ -31,7 +31,7 @@ external_stylesheets = ['https://fonts.googleapis.com/css2?family=Lato&display=s
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app.layout = html.Div(children=[
+app.layout = html.Div(className="body", children=[
     html.H1(children='Relative Strength Screener', className="header-text"),
 
     html.Div([
@@ -41,23 +41,24 @@ app.layout = html.Div(children=[
 
     html.Br(),
 
-    html.Div(
-        children=[
+    html.Div(children=[
             html.Div(
                 children="Select Date Range:",
-                className="menu-title"
+                className="datePicker-text"
                 ),
             dcc.DatePickerRange(
                 id="date-range",
+                className="datePicker",
                 min_date_allowed=dt.datetime(1950,1,1),
                 max_date_allowed=now,
                 start_date=start,
                 end_date=now,
-            ),
+                ),
+            html.Button(id='submit-button', n_clicks=0, children='Submit', className='submit-button'),
         ]
     ),
 
-    html.Button(id='submit-button', n_clicks=0, children='Submit', className='submit-button'),
+    html.Br(),
 
     html.Div(id='temporaryDate'),  
     
@@ -69,7 +70,7 @@ app.layout = html.Div(children=[
 
     html.Br(),
 
-    dcc.Graph(id='my-graph'),  
+    dcc.Graph(id='my-graph', className='graph-div'),  
 ])
 
 @app.callback(
@@ -107,19 +108,32 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
                         x_title="Date",
                         y_title="Price",
                         )
-    fig.update_layout(title_text="Stock Price Performance vs. Relative Strength")
+    fig.update_layout(title={
+        "text": "Stock Price Performance vs. Relative Strength", 
+        "font": dict(size=24),
+        "x": 0.45,
+        })
+
+    fig.update_yaxes(
+        ticks="outside",
+        tickprefix="$",
+        tickcolor="whitesmoke",
+        tickwidth=2,
+        ticklen=5)
 
     fig.update_layout(
-    autosize=False,
-    width=1500,
-    height=500,
-    margin=dict(
-        l=100,
-        r=100,
-        b=100,
-        t=100,
-        pad=4),
-    paper_bgcolor="#b3b3b3",)
+        autosize=False,
+        width=1500,
+        height=800,
+        margin=dict(
+            l=100,
+            r=100,
+            b=100,
+            t=100,
+            pad=4),
+        paper_bgcolor="#1f1f1f",
+        font_color="whitesmoke",
+        )
 
     for stock in stocks:
         

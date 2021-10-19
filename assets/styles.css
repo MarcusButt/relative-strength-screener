@@ -1,21 +1,35 @@
 .header-text {
     font-size: 26px;
     font-family: 'Lato', sans-serif;
+    text-align: center;
 }
 
 * {
-    font-size: 18px;
+    font-size: 16px;
     font-family: 'Lato', sans-serif;
+}
+
+.body {
+    text-align: center;
+}
+
+.datePicker {
+    border-radius: 0.5em;
+    font-size: 16px;
 }
 
 .ticker-input {
     margin-left: 10px;
 }
 
+.datePicker-text {
+    margin-bottom: 10px;
+}
+
 .submit-button {
     display: inline-block;
     padding: 0.5em 1.7em;
-    margin: 1em 0em 1em 0em;
+    margin: 0em 0em 0em 2em;
     border: 0.16em solid rgb(0, 0, 0);
     border-radius: 2em;
     font-weight: 300;
