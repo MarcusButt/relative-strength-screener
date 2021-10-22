@@ -70,7 +70,9 @@ app.layout = html.Div(className="body", children=[
 
     html.Br(),
 
-    dcc.Graph(id='my-graph', className='graph-div'),  
+    html.Div(id='graph-div', className='graph-div', children=[
+        dcc.Graph(id='my-graph', className='graph-div')
+    ]),  
 ])
 
 @app.callback(
@@ -85,8 +87,8 @@ app.layout = html.Div(className="body", children=[
 )
 def update_output_div(n_clicks, start_date, end_date, input_value):
 
-    #startDateObj = dt.strptime(start_date, '%y-%m-%dT%H:%M:%S')
-    #endDateObj = dt.strptime(end_date, '%y-%m-%dT%H:%M:%S')
+    startDateObj = dt.datetime.fromisoformat(start_date)
+    endDateObj = dt.datetime.fromisoformat(end_date)
 
     stocks=list(map(str,input_value.split()))
 

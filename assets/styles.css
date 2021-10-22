@@ -16,6 +16,7 @@
 .datePicker {
     border-radius: 0.5em;
     font-size: 16px;
+     /* can't seem to style datePicker (Dash Core Component) with CSS classes */
 }
 
 .ticker-input {
@@ -43,4 +44,14 @@
 .submit-button:hover {
     color: whitesmoke;
     background-color: black;
+}
+
+.graph-div {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.graph-plot {
+    border-radius: 1em;
 }
