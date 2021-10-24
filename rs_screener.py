@@ -23,6 +23,8 @@ now = now=dt.datetime.now()
 
 emasUsed = [10, 21]
 
+smasUsed = [50, 100, 200]
+
 def listToString(list):   
     # initialize an empty string
     str1 = " " 
@@ -155,7 +157,15 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
         
         movAvg = "SMA_"+str(ma)
 
-        newDf[movAvg] = newDf[closingPrice].rolling(window=50).mean
+        newDf[movAvg] = newDf[closingPrice].rolling(window=50).mean()
+
+        # for x in emasUsed:
+        #     ema=x
+        #     newDf["EMA_"+str(ema)]=round(newDf.iloc[:,4].ewm(span=ema, adjust=False).mean(),2)
+
+        for x in smasUsed:
+            sma=x
+            newDf["SMA_"+str(sma)]=newDf[closingPrice].rolling(window=sma).mean()
 
         if count == 0:
             newDf["Date"] = newDf.index
@@ -173,6 +183,8 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[movAvg], mode="lines", name=movAvg), row=2, col=1)
 
+    print(newDf)
+    
     fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price", line_color="#e86100"), row=1, col=1, secondary_y=False)
 
     stocksInRangeOutput = "Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange)
