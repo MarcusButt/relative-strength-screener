@@ -21,6 +21,8 @@ start = dt.datetime(startyear,startmonth,startday)
 
 now = now=dt.datetime.now()
 
+emasUsed = [10, 21]
+
 def listToString(list):   
     # initialize an empty string
     str1 = " " 
@@ -60,10 +62,6 @@ app.layout = html.Div(className="body", children=[
 
     html.Br(),
 
-    html.Div(id='temporaryDate'),  
-    
-    html.Br(),
-
     html.Div(id='stocksInRange', className='body-text'),
 
     html.Div(id='stocksOutOfRange', className='body-text'),
@@ -79,7 +77,6 @@ app.layout = html.Div(className="body", children=[
     Output('my-graph', 'figure'),
     Output('stocksInRange', 'children'),
     Output('stocksOutOfRange', 'children'),
-    Output('temporaryDate', 'children'),
     Input('submit-button', 'n_clicks'),
     State('date-range','start_date'),
     State('date-range', 'end_date'),
@@ -94,7 +91,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
     newDf = pd.DataFrame()
 
-    SPYIndex = pdr.get_data_yahoo("SPY",start,now)
+    SPYIndex = pdr.get_data_yahoo("SPY",startDateObj,endDateObj)
 
     stocksInRange = []
     stocksOutOfRange = []
@@ -125,8 +122,8 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
     fig.update_layout(
         autosize=False,
-        width=1500,
-        height=800,
+        width=1200,
+        height=700,
         margin=dict(
             l=100,
             r=100,
@@ -139,7 +136,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
     for stock in stocks:
         
-        dataFrame=pdr.get_data_yahoo(stock,start,now)
+        dataFrame=pdr.get_data_yahoo(stock,startDateObj,endDateObj)
 
         low_of_52week = min(dataFrame["Adj Close"][-260:]) #Finds minimum value of last 260 closing prices (260 trading days in 52 weeks)
         high_of_52week = max(dataFrame["Adj Close"][-260:]) #Finds maximum value of last 260 closing prices (260 trading days in 52 weeks)
@@ -153,6 +150,12 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
         closingPrice = stock+"_Price"
 
         newDf[closingPrice] = dataFrame["Adj Close"]
+
+        ma=50
+        
+        movAvg = "SMA_"+str(ma)
+
+        newDf[movAvg] = newDf[closingPrice].rolling(window=50).mean
 
         if count == 0:
             newDf["Date"] = newDf.index
@@ -168,6 +171,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
+        fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[movAvg], mode="lines", name=movAvg), row=2, col=1)
 
     fig.add_trace(go.Scatter(x=newDf["Date"], y=SPYIndex["Adj Close"], mode="lines", name="SPY_Price", line_color="#e86100"), row=1, col=1, secondary_y=False)
 
@@ -178,20 +182,20 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
     if stocksOutOfRange:
         stocksOutOfRangeOutput = "Stocks out of desired range: "+ listToString(stocksOutOfRange)
 
-    date_output = 'test'
+    # date_output = 'test'
 
-    string_prefix = 'You have selected: '
+    # string_prefix = 'You have selected: '
 
-    if start_date is not None:
-        string_prefix = string_prefix + 'Start Date: ' + start_date + ' | '
-    if end_date is not None:
-        string_prefix = string_prefix + 'End Date: ' + end_date
-    if len(string_prefix) == len('You have selected: '):
-        date_output = 'Select a date to see it displayed here'
-    else:
-        date_output = string_prefix
+    # if start_date is not None:
+    #     string_prefix = string_prefix + 'Start Date: ' + start_date + ' | '
+    # if end_date is not None:
+    #     string_prefix = string_prefix + 'End Date: ' + end_date
+    # if len(string_prefix) == len('You have selected: '):
+    #     date_output = 'Select a date to see it displayed here'
+    # else:
+    #     date_output = string_prefix
 
-    return fig, stocksInRangeOutput, stocksOutOfRangeOutput, date_output
+    return fig, stocksInRangeOutput, stocksOutOfRangeOutput
 
 if __name__ == '__main__':
     app.run_server(debug=True)
