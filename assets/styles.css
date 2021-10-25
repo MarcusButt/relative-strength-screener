@@ -13,14 +13,31 @@
     text-align: center;
 }
 
+.statement-text {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.statement_div {
+    text-align: left;
+}
+
 .datePicker {
     border-radius: 0.5em;
     font-size: 16px;
      /* can't seem to style datePicker (Dash Core Component) with CSS classes */
 }
 
+.input_div {
+    display: inline-flex;
+    align-items: center;
+}
+
 .ticker-input {
     margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
 }
 
 .datePicker-text {

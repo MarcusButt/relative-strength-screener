@@ -21,10 +21,6 @@ start = dt.datetime(startyear,startmonth,startday)
 
 now = now=dt.datetime.now()
 
-emasUsed = [10, 21]
-
-smasUsed = [50, 100, 200]
-
 def listToString(list):   
     # initialize an empty string
     str1 = " " 
@@ -38,11 +34,19 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div(className="body", children=[
     html.H1(children='Relative Strength Screener', className="header-text"),
 
-    html.Div([
+    html.Div(className="input_div", children=[
         "Enter a Stock Ticker: ",
-        dcc.Input(id='my-input', value='AAPL', type='text', className="ticker-input")
+        dcc.Input(id='my-input', value='AAPL', type='text', className="ticker-input"),
+    
+        html.Div(className="statement_div", children=[
+            html.Div(id='stocksInRange', className='statement-text'),
+
+            html.Br(),
+
+            html.Div(id='stocksOutOfRange', className='statement-text'),])
     ]),
 
+    html.Br(),
     html.Br(),
 
     html.Div(children=[
@@ -64,9 +68,19 @@ app.layout = html.Div(className="body", children=[
 
     html.Br(),
 
-    html.Div(id='stocksInRange', className='body-text'),
-
-    html.Div(id='stocksOutOfRange', className='body-text'),
+    html.Div(
+        [dcc.Checklist(
+        id="city-checklist",
+        options= [  {"label": "10 Day EMA", "value": "10 EMA"},
+                    {"label": "20 Day EMA", "value": "20 EMA"},
+                    {"label": "50 Day EMA", "value": "50 EMA"},
+                    {"label": "50 Day SMA", "value": "50 SMA"},
+                    {"label": "100 Day SMA", "value": "100 SMA"},
+                    {"label": "200 Day SMA", "value": "200 SMA"},],
+        value=[],
+        labelStyle={"display": "inline-block"},),
+        ]
+    ),
 
     html.Br(),
 
@@ -134,6 +148,10 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
             pad=4),
         paper_bgcolor="#1f1f1f",
         font_color="whitesmoke",
+        yaxis2=dict(
+            title="Relative Strength",
+            side="right",
+            tickprefix="")
         )
 
     for stock in stocks:
@@ -153,19 +171,9 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
         newDf[closingPrice] = dataFrame["Adj Close"]
 
-        ma=50
-        
-        movAvg = "SMA_"+str(ma)
+        emasUsed = [10, 21]
 
-        newDf[movAvg] = newDf[closingPrice].rolling(window=50).mean()
-
-        # for x in emasUsed:
-        #     ema=x
-        #     newDf["EMA_"+str(ema)]=round(newDf.iloc[:,4].ewm(span=ema, adjust=False).mean(),2)
-
-        for x in smasUsed:
-            sma=x
-            newDf["SMA_"+str(sma)]=newDf[closingPrice].rolling(window=sma).mean()
+        smasUsed = [50, 100, 200]
 
         if count == 0:
             newDf["Date"] = newDf.index
@@ -181,7 +189,16 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
-        fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[movAvg], mode="lines", name=movAvg), row=2, col=1)
+
+        # for x in emasUsed:
+        #     ema=x
+        #     newDf["EMA_"+str(ema)]=round(newDf.iloc[:,4].ewm(span=ema, adjust=False).mean(),2)
+
+        for x in smasUsed:
+            sma=x
+            smaName= "SMA_"+str(sma)
+            newDf[smaName]=newDf[closingPrice].rolling(window=sma).mean()
+            fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[smaName], mode="lines", name=smaName), row=2, col=1)
 
     print(newDf)
     
@@ -189,23 +206,10 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
     stocksInRangeOutput = "Stocks within 20 percent of 52 week high: "+ listToString(stocksInRange)
 
-    stocksOutOfRangeOutput = "Stocks out of desired range: none"
+    stocksOutOfRangeOutput = "Stocks out of desired range: None"
 
     if stocksOutOfRange:
         stocksOutOfRangeOutput = "Stocks out of desired range: "+ listToString(stocksOutOfRange)
-
-    # date_output = 'test'
-
-    # string_prefix = 'You have selected: '
-
-    # if start_date is not None:
-    #     string_prefix = string_prefix + 'Start Date: ' + start_date + ' | '
-    # if end_date is not None:
-    #     string_prefix = string_prefix + 'End Date: ' + end_date
-    # if len(string_prefix) == len('You have selected: '):
-    #     date_output = 'Select a date to see it displayed here'
-    # else:
-    #     date_output = string_prefix
 
     return fig, stocksInRangeOutput, stocksOutOfRangeOutput
 
