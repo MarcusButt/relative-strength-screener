@@ -32,7 +32,7 @@ external_stylesheets = ['https://fonts.googleapis.com/css2?family=Lato&display=s
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className="body", children=[
-    html.H1(children='Relative Strength Screener', className="header-text"),
+    html.P(children='Relative Strength Stock Screener', className="header-text"),
 
     html.Div(className="input_div", children=[
         "Enter a Stock Ticker: ",
@@ -49,43 +49,46 @@ app.layout = html.Div(className="body", children=[
     html.Br(),
     html.Br(),
 
-    html.Div(children=[
-            html.Div(
-                children="Select Date Range:",
-                className="datePicker-text"
-                ),
-            dcc.DatePickerRange(
-                id="date-range",
-                className="datePicker",
-                min_date_allowed=dt.datetime(1950,1,1),
-                max_date_allowed=now,
-                start_date=start,
-                end_date=now,
-                ),
-            html.Button(id='submit-button', n_clicks=0, children='Submit', className='submit-button'),
-        ]
-    ),
+    html.Div(className="selections_div", children=[
 
-    html.Br(),
+        html.Div(children=[
+                html.Div(
+                    children="Select Date Range:",
+                    className="datePicker-text"
+                    ),
+                dcc.DatePickerRange(
+                    id="date-range",
+                    className="datePicker",
+                    min_date_allowed=dt.datetime(1950,1,1),
+                    max_date_allowed=now,
+                    start_date=start,
+                    end_date=now,
+                    ),
+                html.Button(id='submit-button', n_clicks=0, children='Submit', className='submit-button'),
+            ]
+        ),
 
-    html.Div(
-        [dcc.Checklist(
-        id="city-checklist",
-        options= [  {"label": "10 Day EMA", "value": "10 EMA"},
-                    {"label": "20 Day EMA", "value": "20 EMA"},
-                    {"label": "50 Day EMA", "value": "50 EMA"},
-                    {"label": "50 Day SMA", "value": "50 SMA"},
-                    {"label": "100 Day SMA", "value": "100 SMA"},
-                    {"label": "200 Day SMA", "value": "200 SMA"},],
-        value=[],
-        labelStyle={"display": "inline-block"},),
-        ]
-    ),
+        html.Br(),
+
+        html.Div(
+            [dcc.Checklist(
+            id="city-checklist",
+            options= [  {"label": "10 Day EMA", "value": "10 EMA"},
+                        {"label": "20 Day EMA", "value": "20 EMA"},
+                        {"label": "50 Day EMA", "value": "50 EMA"},
+                        {"label": "50 Day SMA", "value": "50 SMA"},
+                        {"label": "100 Day SMA", "value": "100 SMA"},
+                        {"label": "200 Day SMA", "value": "200 SMA"},],
+            value=[],
+            labelStyle={"display": "inline-block"},),
+            ]
+        ),
+    ]),
 
     html.Br(),
 
     html.Div(id='graph-div', className='graph-div', children=[
-        dcc.Graph(id='my-graph', className='graph-div')
+        dcc.Graph(id='my-graph', className='graph-plot')
     ]),  
 ])
 
@@ -119,7 +122,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
                         specs=[[{"secondary_y": True}],[{}]],
                         shared_xaxes=True,
                         vertical_spacing=0.1,
-                        subplot_titles=("Relative Strength", "Stock Price"),
+                        subplot_titles=["Relative Strength vs. SPY", "Stock Price"],
                         x_title="Date",
                         y_title="Price",
                         )
@@ -153,6 +156,9 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
             side="right",
             tickprefix="")
         )
+
+    fig.layout.annotations[0].update(y=1.01)
+    fig.layout.annotations[1].update(y=0.46)
 
     for stock in stocks:
         
@@ -197,7 +203,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
         for x in smasUsed:
             sma=x
             smaName= "SMA_"+str(sma)
-            newDf[smaName]=newDf[closingPrice].rolling(window=sma).mean()
+            newDf[smaName]=newDf[closingPrice].rolling(window=sma, min_periods=1).mean()
             fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[smaName], mode="lines", name=smaName), row=2, col=1)
 
     print(newDf)
