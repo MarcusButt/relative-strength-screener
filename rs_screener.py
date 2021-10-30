@@ -13,7 +13,7 @@ import dash_core_components as dcc
 
 yf.pdr_override()
 
-startyear=2020
+startyear=2021
 startmonth=1
 startday=1
 
@@ -72,13 +72,18 @@ app.layout = html.Div(className="body", children=[
 
         html.Div(
             [dcc.Checklist(
-            id="city-checklist",
-            options= [  {"label": "10 Day EMA", "value": "10 EMA"},
-                        {"label": "20 Day EMA", "value": "20 EMA"},
-                        {"label": "50 Day EMA", "value": "50 EMA"},
-                        {"label": "50 Day SMA", "value": "50 SMA"},
-                        {"label": "100 Day SMA", "value": "100 SMA"},
-                        {"label": "200 Day SMA", "value": "200 SMA"},],
+            id="ema-checklist",
+            options= [  {"label": "10 Day EMA", "value": "10"},
+                        {"label": "20 Day EMA", "value": "20"},
+                        {"label": "50 Day EMA", "value": "50"},],
+            value=[],
+            labelStyle={"display": "inline-block"},),
+
+            dcc.Checklist(
+            id="sma-checklist",
+            options= [  {"label": "50 Day SMA", "value": "50"},
+                        {"label": "100 Day SMA", "value": "100"},
+                        {"label": "200 Day SMA", "value": "200"},],
             value=[],
             labelStyle={"display": "inline-block"},),
             ]
@@ -99,9 +104,12 @@ app.layout = html.Div(className="body", children=[
     Input('submit-button', 'n_clicks'),
     State('date-range','start_date'),
     State('date-range', 'end_date'),
-    State(component_id='my-input', component_property='value')
+    State(component_id='my-input', component_property='value'),
+    Input('ema-checklist','value'),
+    Input('sma-checklist','value')
 )
-def update_output_div(n_clicks, start_date, end_date, input_value):
+
+def update_output_div(n_clicks, start_date, end_date, input_value, ema_list, sma_list):
 
     startDateObj = dt.datetime.fromisoformat(start_date)
     endDateObj = dt.datetime.fromisoformat(end_date)
@@ -177,7 +185,7 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
 
         newDf[closingPrice] = dataFrame["Adj Close"]
 
-        emasUsed = [10, 21]
+        emasUsed = [10, 20, 50]
 
         smasUsed = [50, 100, 200]
 
@@ -196,13 +204,15 @@ def update_output_div(n_clicks, start_date, end_date, input_value):
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[columnName], mode="lines", name=columnName, line=dict(dash='dash')), row=1, col=1, secondary_y=True)
         fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[closingPrice], mode="lines", name=closingPrice), row=2, col=1)
 
-        # for x in emasUsed:
-        #     ema=x
-        #     newDf["EMA_"+str(ema)]=round(newDf.iloc[:,4].ewm(span=ema, adjust=False).mean(),2)
+        for x in ema_list:
+            ema=int(x)
+            emaName="EMA_"+ x
+            newDf["EMA_"+str(ema)]=round(newDf[closingPrice].ewm(span=ema, adjust=False).mean(),2)
+            fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[emaName], mode="lines", name=emaName), row=2, col=1)
 
-        for x in smasUsed:
-            sma=x
-            smaName= "SMA_"+str(sma)
+        for x in sma_list:
+            sma=int(x)  
+            smaName= "SMA_"+ x
             newDf[smaName]=newDf[closingPrice].rolling(window=sma, min_periods=1).mean()
             fig.add_trace(go.Scatter(x=newDf["Date"], y=newDf[smaName], mode="lines", name=smaName), row=2, col=1)
 
