@@ -32,7 +32,10 @@ external_stylesheets = ['https://fonts.googleapis.com/css2?family=Lato&display=s
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(className="body", children=[
-    html.P(children='Relative Strength Stock Screener', className="header-text"),
+    
+    html.Div(children='Relative Strength Stock Screener', className="header-text"),
+
+    html.Br(),
 
     html.Div(className="input_div", children=[
         "Enter a Stock Ticker: ",
@@ -51,7 +54,7 @@ app.layout = html.Div(className="body", children=[
 
     html.Div(className="selections_div", children=[
 
-        html.Div(children=[
+        html.Div(className="datePicker_container", children=[
                 html.Div(
                     children="Select Date Range:",
                     className="datePicker-text"
@@ -90,6 +93,7 @@ app.layout = html.Div(className="body", children=[
         ),
     ]),
 
+    html.Br(),
     html.Br(),
 
     html.Div(id='graph-div', className='graph-div', children=[
