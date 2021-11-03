@@ -35,8 +35,6 @@ app.layout = html.Div(className="body", children=[
     
     html.Div(children='Relative Strength Stock Screener', className="header-text"),
 
-    html.Br(),
-
     html.Div(className="input_div", children=[
         "Enter a Stock Ticker: ",
         dcc.Input(id='my-input', value='AAPL', type='text', className="ticker-input"),
@@ -49,7 +47,6 @@ app.layout = html.Div(className="body", children=[
             html.Div(id='stocksOutOfRange', className='statement-text'),])
     ]),
 
-    html.Br(),
     html.Br(),
 
     html.Div(className="selections_div", children=[
@@ -93,7 +90,6 @@ app.layout = html.Div(className="body", children=[
         ),
     ]),
 
-    html.Br(),
     html.Br(),
 
     html.Div(id='graph-div', className='graph-div', children=[
