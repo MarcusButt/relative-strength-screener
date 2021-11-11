@@ -1,0 +1,102 @@
+* {
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+}
+
+.body {
+    text-align: center;
+    background-color: rgb(0, 0, 0);
+    margin: none;
+}
+
+body {
+    margin: 0px;
+}
+
+P {
+    margin: 0px;
+}
+
+.header-text {
+    font-size: 26px;
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    color: whitesmoke;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.statement-text {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.statement_div {
+    text-align: left;
+}
+
+.datePicker {
+    border-radius: 10px;
+    font-size: 16px;
+     /* can't seem to style datePicker (Dash Core Component) with CSS classes */
+}
+
+.input_div {
+    display: inline-flex;
+    align-items: center;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 12px;
+    color: whitesmoke;
+    min-width: 710px;
+}
+
+.ticker-input {
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.selections_div {
+    display: inline-block;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 12px;
+    color: whitesmoke;
+    min-width: 710px;
+}
+
+.datePicker-text {
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    display: inline-block;
+    padding: 0.5em 1.7em;
+    margin: 0em 0em 0em 2em;
+    border: 0.16em solid rgb(0, 0, 0);
+    border-radius: 2em;
+    font-weight: 300;
+    background-color: whitesmoke;
+    color: black;
+    text-shadow: 0 0.04em 0.04em rgba(255, 255, 255, 0.253);
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.submit-button:hover {
+    color: whitesmoke;
+    background-color: black;
+}
+
+.graph-div {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.graph-plot {
+    border-radius: 10px;
+    margin: 20px
+}
