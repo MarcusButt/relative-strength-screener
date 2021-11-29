@@ -14,9 +14,9 @@ A few definitions:
 
 		   	   The result of this calculation is the ratio between both securities which can be used to compare their performance relative to one another over a given timeframe. 
 
-			   If relative strength is increasing, then the chosen securities price has been performing better than the "base" security. 
+			   If relative strength is increasing, then the chosen security's price has been performing better than the "base" security. 
 
-			   If relative strength is decreasing, then the chosen securities price has been performing worse than the "base" security. 
+			   If relative strength is decreasing, then the chosen security's price has been performing worse than the "base" security. 
 
 			   If relative strength is flat, then the performance of the chosen security and the "base" security have been similar. 
 
@@ -25,3 +25,11 @@ A few definitions:
 	Exponential Moving Average (EMA): 
 
 App Components: 
+
+Relative Strength Chart - 
+
+Stock Price Chart - 
+
+How to Use: 
+
+Simply enter the ticker for the stock you are looking for in the search bar and toggle on/off the moving average you would like to include in the price chart. 
