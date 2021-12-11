@@ -46,7 +46,7 @@ P {
 .datePicker {
     border-radius: 10px;
     font-size: 16px;
-     /* can't seem to style datePicker (Dash Core Component) with CSS classes */
+    height: 20px;
 }
 
 .input_div {
@@ -84,10 +84,19 @@ P {
     margin-bottom: 10px;
 }
 
+.DateInput_input, .DateInput_input_1 {
+    text-align: center;
+    font-size: inherit ! important;
+    Height: 36px !important;
+    Width: 100% !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    }
+
 .submit-button {
     display: inline-block;
-    height: 52px;
-    padding: 0.5em 1.7em;
+    height: 40px;
+    padding: 0.5em 1.5em;
     margin-left: 20px;
     border: 0.16em solid rgb(0, 0, 0);
     border-radius: 2em;
@@ -96,11 +105,13 @@ P {
     background-color: rgb(63, 63, 63);
     text-shadow: 0 0.04em 0.04em rgba(255, 255, 255, 0.253);
     text-align: center;
+    vertical-align: middle;
     transition: all 0.2s;
 }
 
 .submit-button:hover {
     color: rgb(0, 0, 0);
+    font-weight: 700;
     background-color: rgb(255, 153, 36);
 }
 
