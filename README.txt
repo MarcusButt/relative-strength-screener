@@ -24,12 +24,13 @@ A few definitions:
 
 App Components: 
 
-Search Bar: This is where you will enter the ticker(s) and date parameters to update both of the charts below. 
-	    Beneath the search bar there are buttons to toggle on/off each of the moving averages on the main price chart. 
+Search Bar: This is where you will enter the ticker(s) of the securities you wish to analyze. It will also make note of any of the securities trading near 52-week highs. 
+	    
+Graph Options: This component contains the date picker, submit button, and buttons to toggle on/off each of the moving averages on the main price chart. 
 
 Relative Strength Chart: This chart graphs the relative strength of the security indicated (dotted line) vs. the price of the S&P 500 index. 
 			 It provides you with a snapshot of the security's performance against the movement of the broader market. 
 
-Stock Price Chart:  
+Stock Price Chart: The second chart shows the price of the securities in question along with the moving averages 
 
 How to Use: Simply enter the ticker for the stock you are looking for in the search bar and toggle on/off the moving average you would like to include in the price chart. 
