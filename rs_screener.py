@@ -31,6 +31,8 @@ external_stylesheets = ['https://fonts.googleapis.com/css2?family=Lato&display=s
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+server = app.server
+
 app.layout = html.Div(className="body", children=[
     
     html.Div(children='Relative Strength Stock Screener', className="header-text"),
