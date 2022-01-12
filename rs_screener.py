@@ -72,22 +72,22 @@ app.layout = html.Div(className="body", children=[
 
         html.Br(),
 
-        html.Div(
+        html.Div(className="checklist-div", children=
             [dcc.Checklist(
-            id="ema-checklist",
+            id="ema-checklist", className="ema-checklist",
             options= [  {"label": "10 Day EMA", "value": "10"},
                         {"label": "20 Day EMA", "value": "20"},
                         {"label": "50 Day EMA", "value": "50"},],
             value=[],
-            labelStyle={"display": "inline-block"},),
+            labelStyle={"display": "flex"},),
 
             dcc.Checklist(
-            id="sma-checklist",
+            id="sma-checklist", className="sma-checklist",
             options= [  {"label": "50 Day SMA", "value": "50"},
                         {"label": "100 Day SMA", "value": "100"},
                         {"label": "200 Day SMA", "value": "200"},],
             value=[],
-            labelStyle={"display": "inline-block"},),
+            labelStyle={"display": "flex"},),
             ]
         ),
     ]),

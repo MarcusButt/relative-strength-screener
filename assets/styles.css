@@ -93,6 +93,23 @@ P {
     padding-right: 3px !important;
     }
 
+.checklist-div {display: inline-block;
+    justify-content: center;}
+
+.ema-checklist {
+    display: flex;
+    justify-content: space-between;
+    width: 380px;
+    margin: 2px;
+}
+
+.sma-checklist {
+    display: flex;
+    justify-content: space-between;
+    width: 380px;
+    margin: 2px;
+}
+
 .main-svg {
     user-select: none;
     border-radius: 10px;
